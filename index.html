@@ -532,10 +532,14 @@ async function save(){
     try{const logs=JSON.parse(localStorage.getItem(LKEY)||'[]');localStorage.setItem(LKEY,JSON.stringify(logs.filter(l=>l.savedAt!==editingSavedAt)));}catch(e){}
     addDeleted(editingSavedAt);
     if(url){try{await fetch(url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'delete',savedAt:editingSavedAt})});}catch(e){}}
+    // 메모리에서도 즉시 제거
+    allLogs=allLogs.filter(l=>l.savedAt!==editingSavedAt);
     editingSavedAt='';
     document.getElementById('save-btn').textContent='💾 저장 및 전송';
   }
   try{const logs=JSON.parse(localStorage.getItem(LKEY)||'[]');logs.unshift(d);localStorage.setItem(LKEY,JSON.stringify(logs.slice(0,500)));}catch(e){}
+  // 메모리에 새 항목 추가
+  allLogs.unshift(d);
   // 캐시 무효화
   localStorage.removeItem(CKEY);
   if(url){
