@@ -222,6 +222,24 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
       <div class="f"><label class="fl">Lot No.</label><input type="text" id="d-lot" placeholder="Lot 번호"></div>
       <div class="f"><label class="fl">납기</label><input type="date" id="d-deadline"></div>
     </div>
+    <div class="div"></div>
+    <div class="f">
+      <label class="fl">도면 사진 <em>촬영 또는 파일 선택</em></label>
+      <div style="display:flex;gap:8px;margin-bottom:10px">
+        <label style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:#378ADD;color:#fff;border-radius:10px;padding:13px;font-size:15px;font-weight:600;cursor:pointer">
+          📷 카메라 촬영
+          <input type="file" accept="image/*" capture="environment" id="d-img-cam" style="display:none" onchange="previewImg(this,'cam')">
+        </label>
+        <label style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:#f5f2ed;color:#333;border:1.5px solid #ccc;border-radius:10px;padding:13px;font-size:15px;font-weight:600;cursor:pointer">
+          🖼️ 파일 선택
+          <input type="file" accept="image/*" id="d-img-file" style="display:none" onchange="previewImg(this,'file')">
+        </label>
+      </div>
+      <div id="img-preview" style="display:none;position:relative;margin-top:6px">
+        <img id="img-preview-src" style="width:100%;border-radius:10px;border:1.5px solid #e0ddd8;max-height:240px;object-fit:contain;background:#f5f2ed">
+        <button onclick="clearImg()" style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,.55);color:#fff;border:none;border-radius:20px;padding:5px 12px;font-size:13px;cursor:pointer;font-family:inherit">✕ 삭제</button>
+      </div>
+    </div>
     <div class="nav"><button class="nbp" onclick="go(2)">← 이전</button><button class="nbn" onclick="go(4)">다음 →</button></div>
   </div>
 
@@ -502,6 +520,26 @@ function cTimes(){
   if(mt&&mt>0&&cyc>0&&prod>0) setTx('d-eff',Math.round(prod*cyc/mt*100)+' %');
 }
 
+// ── image ─────────────────────────────────────────
+let imgData='';
+function previewImg(input,type){
+  const file=input.files[0]; if(!file)return;
+  const r=new FileReader();
+  r.onload=e=>{
+    imgData=e.target.result;
+    document.getElementById('img-preview-src').src=imgData;
+    document.getElementById('img-preview').style.display='';
+  };
+  r.readAsDataURL(file);
+}
+function clearImg(){
+  imgData='';
+  document.getElementById('img-preview').style.display='none';
+  document.getElementById('img-preview-src').src='';
+  document.getElementById('d-img-cam').value='';
+  document.getElementById('d-img-file').value='';
+}
+
 // ── collect ───────────────────────────────────────
 function collect(){
   // 공정 사용 공구
@@ -525,6 +563,7 @@ function collect(){
     cycM:gn('d-cym'),cycS:gn('d-cys'),eff:tx('d-eff'),
     processTools, tools,
     notes:gv('d-notes'),s1:gv('d-s1'),s2:gv('d-s2'),s3:gv('d-s3'),
+    drawingImg:imgData,
     savedAt:new Date().toISOString()
   };
 }
