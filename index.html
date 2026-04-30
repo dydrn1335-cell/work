@@ -358,6 +358,8 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 const DAYS=['일','월','화','수','목','금','토'];
 const SNAMES=['기본정보','기계가동','수주소재','생산실적','시간기록','공구관리','특이사항'];
 const LKEY='hg_logs2',UKEY='hg_url',DKEY='hg_deleted2',CKEY='hg_cache2';
+const DEFAULT_URL='https://script.google.com/macros/s/AKfycbxzXbeVoknYDgo6lHaalP0KEoR-MAf9NSDSw8kN8mH3Y01EyBPE_j15TGJ-5J_utSvQ-g/exec';
+if(!localStorage.getItem(UKEY)) localStorage.setItem(UKEY,DEFAULT_URL);
 const MACHINES=['전체','CNC선반1','CNC선반2','CNC선반3','범용선반','범용밀링','MCT5호기','MCT6호기'];
 let cur=1,opMin=0,imgList=[],editingSavedAt='',justSaved=false;
 let allLogs=[],filtDate='all',filtMachine='전체',filtFrom='',filtTo='',dashView='list',detailIdx=-1;
@@ -602,7 +604,9 @@ async function save(){
   localStorage.removeItem(CKEY);
   justSaved=true;
   if(url){
-    try{await fetch(url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(d)});toast('✅ 저장 완료! 서버로 전송됐습니다.');}
+    // 서버엔 사진 제외하고 전송 (용량 절감)
+    const serverData={...d, drawingImgs:[], drawingImg:''};
+    try{await fetch(url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(serverData)});toast('✅ 저장 완료! 서버로 전송됐습니다.');}
     catch(e){toast('💾 로컬 저장됨 (서버 전송 실패)',1);}
   }else{toast('💾 로컬에 저장됐습니다');}
 }
@@ -628,29 +632,53 @@ async function loadDash(){
     try{const loc=filterDeleted(JSON.parse(localStorage.getItem(LKEY)||'[]'));if(loc.length){allLogs=loc;renderDash();}}catch(e){}
     return;
   }
-  // 캐시 먼저 표시
+  // 캐시 즉시 표시 (깜빡임 없이)
   try{
     const cached=JSON.parse(localStorage.getItem(CKEY)||'null');
-    if(cached&&cached.length){allLogs=filterDeleted(cached);renderDash();}
-    else c.innerHTML='<div class="loading">⏳ 데이터를 불러오는 중...</div>';
+    if(cached&&cached.length){
+      allLogs=mergeWithLocal(filterDeleted(cached));
+      renderDash();
+    } else {
+      c.innerHTML='<div class="loading">⏳ 처음 로딩 중...</div>';
+    }
   }catch(e){c.innerHTML='<div class="loading">⏳ 데이터를 불러오는 중...</div>';}
-  // 백그라운드 fetch
+
+  // 타임아웃 5초 + 백그라운드 fetch
   try{
-    const res=await fetch(url+'?v='+Date.now());
+    const ctrl=new AbortController();
+    const timer=setTimeout(()=>ctrl.abort(),5000);
+    const res=await fetch(url+'?v='+Date.now(),{signal:ctrl.signal});
+    clearTimeout(timer);
     const data=await res.json();
     if(Array.isArray(data)){
       localStorage.setItem(CKEY,JSON.stringify(data));
-      allLogs=filterDeleted(data);
+      allLogs=mergeWithLocal(filterDeleted(data));
       renderDash();
     }
   }catch(e){
     if(!allLogs.length){
-      try{allLogs=filterDeleted(JSON.parse(localStorage.getItem(LKEY)||'[]'));}catch(err){allLogs=[];}
-      c.innerHTML=`<div style="background:#fff3f3;border:1px solid #f5c5c5;border-radius:10px;padding:12px;font-size:13px;color:#7a0000;margin-bottom:12px">⚠️ 서버 연결 실패. 로컬 데이터를 표시합니다.</div>`;
+      try{allLogs=mergeWithLocal(filterDeleted(JSON.parse(localStorage.getItem(LKEY)||'[]')));}catch(err){allLogs=[];}
+      c.innerHTML=`<div style="background:#fff3f3;border:1px solid #f5c5c5;border-radius:10px;padding:12px;font-size:13px;color:#7a0000;margin-bottom:12px">⚠️ 서버 응답 없음. 로컬 데이터를 표시합니다.</div>`;
       if(allLogs.length) renderDash();
       else c.innerHTML+='<div class="empty"><div class="ic">📋</div><p>저장된 데이터가 없습니다</p></div>';
     }
   }
+}
+
+// 서버 데이터 + 로컬 사진 병합 (서버엔 사진이 없으므로 로컬에서 보완)
+function mergeWithLocal(serverLogs){
+  try{
+    const local=JSON.parse(localStorage.getItem(LKEY)||'[]');
+    const localMap={};
+    local.forEach(l=>{ if(l.savedAt) localMap[l.savedAt]=l; });
+    return serverLogs.map(d=>{
+      const loc=localMap[d.savedAt];
+      if(loc&&(loc.drawingImgs?.length||loc.drawingImg)){
+        return {...d, drawingImgs:loc.drawingImgs||(loc.drawingImg?[loc.drawingImg]:[])};
+      }
+      return d;
+    });
+  }catch(e){return serverLogs;}
 }
 
 function renderDash(){
