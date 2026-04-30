@@ -660,6 +660,7 @@ function renderDash(){
           <div class="li2" style="margin-top:2px">생산 ${d.prod||0}EA · 불량률 ${d.defRate||'0%'}</div>
         </div>
         <span class="lbadge ${rate>5?'r':'g'}" style="margin-right:6px">${rate>5?'불량주의':'정상'}</span>
+        <button onclick="editLog(${allLogs.indexOf(d)})" style="background:#E6F1FB;border:1px solid #378ADD;color:#185FA5;border-radius:7px;padding:6px 10px;font-size:13px;cursor:pointer;font-family:inherit;font-weight:600;flex-shrink:0;margin-right:4px">수정</button>
         <button onclick="delLog('${d.savedAt}')" style="background:#FCEBEB;border:1px solid #f09595;color:#A32D2D;border-radius:7px;padding:6px 10px;font-size:13px;cursor:pointer;font-family:inherit;font-weight:600;flex-shrink:0">삭제</button>
       </div>`;
     }).join(''):'<div class="empty"><div class="ic">🔍</div><p>조건에 맞는 데이터가 없습니다</p></div>');
@@ -668,6 +669,65 @@ function renderDash(){
 function setFilt(type,val){
   if(type==='date') filtDate=val; else filtMachine=val;
   renderDash();
+}
+
+function editLog(i){
+  const d=allLogs[i]; if(!d) return;
+  // 기본정보
+  document.getElementById('d-date').value=d.date||'';
+  setDow();
+  document.getElementById('d-worker').value=d.worker||'';
+  if(d.machine) document.querySelectorAll('[data-g="machine"]').forEach(b=>{if(b.dataset.v===d.machine)b.classList.add('on');else b.classList.remove('on');});
+  // 기계가동
+  document.getElementById('d-on').value=d.powerOn||'';
+  document.getElementById('d-off').value=d.powerOff||'';
+  cOp();
+  const stops=['t','a','s','m','md','d','o'];
+  stops.forEach((k,idx)=>{if(d.stop)document.getElementById('st'+idx).value=d.stop[k]||0;});
+  cStop();
+  if(d.coolant) document.querySelectorAll('[data-g="cool"]').forEach(b=>{if(b.dataset.v===d.coolant)b.classList.add('on');else b.classList.remove('on');});
+  document.getElementById('cd-row').style.display=d.coolant==='교체'?'':'none';
+  document.getElementById('d-cooldt').value=d.coolantDate||'';
+  // 수주소재
+  document.getElementById('d-client').value=d.client||'';
+  document.getElementById('d-product').value=d.product||'';
+  document.getElementById('d-mat').value=d.material||'';
+  document.getElementById('d-spec').value=d.spec||'';
+  document.getElementById('d-order').value=d.order||0;
+  document.getElementById('d-stock').value=d.stock||0;
+  document.getElementById('d-plan').value=d.plan||0;
+  document.getElementById('d-lot').value=d.lot||'';
+  document.getElementById('d-deadline').value=d.deadline||'';
+  if(d.drawingImg){imgData=d.drawingImg;document.getElementById('img-preview-src').src=imgData;document.getElementById('img-preview').style.display='';}
+  // 생산실적
+  document.getElementById('d-prod').value=d.prod||0;
+  document.getElementById('d-good').value=d.good||0;
+  document.getElementById('d-defect').value=d.defect||0;
+  document.getElementById('d-nc').value=d.nc||0;
+  cDef();
+  if(d.defTypes){document.getElementById('dt0').value=d.defTypes.dim||0;document.getElementById('dt1').value=d.defTypes.app||0;document.getElementById('dt2').value=d.defTypes.burr||0;document.getElementById('dt3').value=d.defTypes.crack||0;document.getElementById('dt4').value=d.defTypes.tool||0;document.getElementById('dt5').value=d.defTypes.rework||0;}
+  document.getElementById('d-dreason').value=d.defReason||'';
+  // 시간기록
+  document.getElementById('d-sus').value=d.suStart||'';
+  document.getElementById('d-sue').value=d.suEnd||'';
+  document.getElementById('d-mcs').value=d.mcStart||'';
+  document.getElementById('d-mce').value=d.mcEnd||'';
+  document.getElementById('d-cym').value=d.cycM||0;
+  document.getElementById('d-cys').value=d.cycS||0;
+  cTimes();
+  // 공정공구
+  if(d.processTools) d.processTools.forEach(t=>{const ni=document.getElementById(`pt-n${t.no}`);const ti=document.getElementById(`pt-t${t.no}`);if(ni)ni.value=t.name||'';if(ti)ti.value=t.tNum||'';});
+  // 공구교체
+  if(d.tools) d.tools.forEach(t=>{const ni=document.getElementById(`tc-n${t.no}`);if(ni){ni.value=t.name||'';document.getElementById(`tc-t${t.no}`).value=t.tNum||'';document.getElementById(`tc-p${t.no}`).value=t.price||0;document.getElementById(`tc-q${t.no}`).value=t.prevQty||0;document.getElementById(`tc-tm${t.no}`).value=t.time||'';document.getElementById(`tc-l${t.no}`).value=t.life||0;document.getElementById(`tc-sm${t.no}`).value=t.spMax||0;document.getElementById(`tc-sa${t.no}`).value=t.spAvg||0;if(t.reason)document.querySelectorAll(`[data-g="tr${t.no}"]`).forEach(b=>{if(b.dataset.v===t.reason)b.classList.add('on');else b.classList.remove('on');});}});
+  // 특이사항
+  document.getElementById('d-notes').value=d.notes||'';
+  document.getElementById('d-s1').value=d.s1||'';
+  document.getElementById('d-s2').value=d.s2||'';
+  document.getElementById('d-s3').value=d.s3||'';
+  // 작성 탭으로 이동
+  showTab('w');
+  go(1);
+  toast('✏️ 수정 모드 — 내용 수정 후 저장하세요');
 }
 
 async function delLog(savedAt){
