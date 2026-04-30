@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>회광정밀 작업일지</title>
+<title>회광정밀 작업일지 v2</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{background:#f0ede8;font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;min-height:100vh;color:#111}
@@ -613,20 +613,41 @@ function renderDash(){
      <div style="font-size:13px;color:#888;margin-bottom:10px">${logs.length}건 조회됨</div>`+
     (logs.length?logs.map(d=>{
       const rate=parseFloat(d.defRate)||0;
-      return `<div class="li" onclick="showDetail(${allLogs.indexOf(d)})">
-        <div style="flex:1">
+      return `<div class="li">
+        <div style="flex:1" onclick="showDetail(${allLogs.indexOf(d)})">
           <div class="ld">${d.date} (${d.dow||'-'})</div>
           <div class="li2">${d.worker||'-'} · ${d.machine||'-'}</div>
           <div class="li2" style="margin-top:2px">생산 ${d.prod||0}EA · 불량률 ${d.defRate||'0%'}</div>
         </div>
-        <span class="lbadge ${rate>5?'r':'g'}">${rate>5?'불량주의':'정상'}</span>
-        <div class="larr">›</div>
+        <span class="lbadge ${rate>5?'r':'g'}" style="margin-right:6px">${rate>5?'불량주의':'정상'}</span>
+        <button onclick="delLog('${d.savedAt}')" style="background:#FCEBEB;border:1px solid #f09595;color:#A32D2D;border-radius:7px;padding:6px 10px;font-size:13px;cursor:pointer;font-family:inherit;font-weight:600;flex-shrink:0">삭제</button>
       </div>`;
     }).join(''):'<div class="empty"><div class="ic">🔍</div><p>조건에 맞는 데이터가 없습니다</p></div>');
 }
 
 function setFilt(type,val){
   if(type==='date') filtDate=val; else filtMachine=val;
+  renderDash();
+}
+
+async function delLog(savedAt){
+  if(!confirm('이 작업일지를 삭제하시겠습니까?')) return;
+  // 로컬 삭제
+  try{
+    const logs=JSON.parse(localStorage.getItem(LKEY)||'[]');
+    const filtered=logs.filter(d=>d.savedAt!==savedAt);
+    localStorage.setItem(LKEY,JSON.stringify(filtered));
+  }catch(e){}
+  // 서버 삭제
+  const url=localStorage.getItem(UKEY);
+  if(url){
+    try{
+      await fetch(url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},
+        body:JSON.stringify({action:'delete',savedAt})});
+    }catch(e){}
+  }
+  allLogs=allLogs.filter(d=>d.savedAt!==savedAt);
+  toast('🗑️ 삭제되었습니다');
   renderDash();
 }
 
