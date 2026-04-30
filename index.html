@@ -58,7 +58,6 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .pcard input:focus{outline:none}
 .pcard .pu{font-size:11px;color:#aaa;margin-top:4px}
 .pcard.red input{color:#A32D2D}
-/* 공정공구 테이블 */
 .ptbl{background:#fff;border-radius:10px;overflow:hidden;border:1px solid #e0ddd8;margin-bottom:4px}
 .ptbl-hdr{display:grid;grid-template-columns:28px 1fr 90px;background:#e8e5e0;padding:8px 10px;gap:8px}
 .ptbl-hdr span{font-size:12px;font-weight:700;color:#555}
@@ -80,15 +79,13 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .stat .sl2{font-size:11px;color:#888;margin-bottom:4px}
 .stat .sv{font-size:22px;font-weight:700;color:#111}
 .stat .su{font-size:10px;color:#aaa;margin-top:2px}
-.frow{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+.frow{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;align-items:center}
 .ftag{font-size:13px;padding:7px 12px;border-radius:20px;border:1.5px solid #ccc;cursor:pointer;background:#fff;color:#555;font-family:inherit;transition:all .1s}
 .ftag.on{background:#E6F1FB;border-color:#378ADD;color:#185FA5;font-weight:600}
 .fsel{font-size:14px;padding:7px 10px;border-radius:9px;border:1.5px solid #ccc;background:#fff;color:#111;font-family:inherit;flex:1;min-width:90px}
-.li{display:flex;align-items:center;padding:12px 13px;border:1px solid #e0ddd8;border-radius:10px;margin-bottom:7px;cursor:pointer;background:#fff;gap:10px;transition:border-color .15s}
-.li:active{border-color:#378ADD}
+.li{display:flex;align-items:center;padding:12px 13px;border:1px solid #e0ddd8;border-radius:10px;margin-bottom:7px;background:#fff;gap:8px}
 .ld{font-size:15px;font-weight:700;color:#111}
 .li2{font-size:12px;color:#777;margin-top:2px}
-.larr{font-size:20px;color:#ccc;margin-left:auto}
 .lbadge{font-size:11px;padding:3px 8px;border-radius:20px;font-weight:600;flex-shrink:0}
 .lbadge.g{background:#EAF3DE;color:#27500A}
 .lbadge.r{background:#FCEBEB;color:#791F1F}
@@ -128,24 +125,17 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 </head>
 <body>
 <div class="wrap">
-
 <div class="hdr">
-  <div class="hdr-l">
-    <span class="hdr-ic">🏭</span>
-    <div><div class="hdr-t">회광정밀</div><div class="hdr-s">일일 작업일지</div></div>
-  </div>
+  <div class="hdr-l"><span class="hdr-ic">🏭</span><div><div class="hdr-t">회광정밀</div><div class="hdr-s">일일 작업일지</div></div></div>
   <button class="gear-btn" onclick="openSettings()">⚙️</button>
 </div>
-
 <div class="tabs">
   <button class="tbtn on" id="tb-w" onclick="showTab('w')">✏️ 작업일지 작성</button>
   <button class="tbtn" id="tb-d" onclick="showTab('d')">📊 현황 조회</button>
 </div>
-
 <div id="vw">
   <div class="sbar" id="sbar"></div>
-
-  <!-- S1 기본정보 (교대 제거, 장비 수정) -->
+  <!-- S1 -->
   <div class="sec on" id="s1">
     <div class="sec-h">① 기본 정보</div>
     <div class="r2">
@@ -166,8 +156,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     </div>
     <div class="nav"><button class="nbn" onclick="go(2)">다음 →</button></div>
   </div>
-
-  <!-- S2 기계가동 -->
+  <!-- S2 -->
   <div class="sec" id="s2">
     <div class="sec-h">② 기계 가동 현황</div>
     <div class="r2">
@@ -201,8 +190,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     <div class="f" id="cd-row" style="display:none"><label class="fl">교체 일자</label><input type="date" id="d-cooldt"></div>
     <div class="nav"><button class="nbp" onclick="go(1)">← 이전</button><button class="nbn" onclick="go(3)">다음 →</button></div>
   </div>
-
-  <!-- S3 수주소재 -->
+  <!-- S3 -->
   <div class="sec" id="s3">
     <div class="sec-h">③ 수주 · 소재</div>
     <div class="r2">
@@ -228,11 +216,11 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
       <div style="display:flex;gap:8px;margin-bottom:10px">
         <label style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:#378ADD;color:#fff;border-radius:10px;padding:13px;font-size:15px;font-weight:600;cursor:pointer">
           📷 카메라 촬영
-          <input type="file" accept="image/*" capture="environment" id="d-img-cam" style="display:none" onchange="previewImg(this,'cam')">
+          <input type="file" accept="image/*" capture="environment" id="d-img-cam" style="display:none" onchange="previewImg(this)">
         </label>
         <label style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:#f5f2ed;color:#333;border:1.5px solid #ccc;border-radius:10px;padding:13px;font-size:15px;font-weight:600;cursor:pointer">
           🖼️ 파일 선택
-          <input type="file" accept="image/*" id="d-img-file" style="display:none" onchange="previewImg(this,'file')">
+          <input type="file" accept="image/*" id="d-img-file" style="display:none" onchange="previewImg(this)">
         </label>
       </div>
       <div id="img-preview" style="display:none;position:relative;margin-top:6px">
@@ -242,8 +230,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     </div>
     <div class="nav"><button class="nbp" onclick="go(2)">← 이전</button><button class="nbn" onclick="go(4)">다음 →</button></div>
   </div>
-
-  <!-- S4 생산실적 -->
+  <!-- S4 -->
   <div class="sec" id="s4">
     <div class="sec-h">④ 생산 실적</div>
     <div class="pcards">
@@ -266,8 +253,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     <div class="f"><label class="fl">불량 사유</label><input type="text" id="d-dreason" placeholder="예: 공구 마모로 인한 치수 초과"></div>
     <div class="nav"><button class="nbp" onclick="go(3)">← 이전</button><button class="nbn" onclick="go(5)">다음 →</button></div>
   </div>
-
-  <!-- S5 시간기록 -->
+  <!-- S5 -->
   <div class="sec" id="s5">
     <div class="sec-h">⑤ 시간 기록</div>
     <div class="f"><label class="fl">셋업 시간</label>
@@ -293,36 +279,24 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     <div class="f"><label class="fl">효율 <em>자동계산</em></label><div class="av" id="d-eff">- %</div></div>
     <div class="nav"><button class="nbp" onclick="go(4)">← 이전</button><button class="nbn" onclick="go(6)">다음 →</button></div>
   </div>
-
-  <!-- S6 공구 (공정공구 목록 + 공구교체) -->
+  <!-- S6 -->
   <div class="sec" id="s6">
     <div class="sec-h">⑥ 공구 관리</div>
-
-    <!-- 공정 사용 공구 목록 (신규) -->
     <div class="f">
       <label class="fl">공정 사용 공구 목록 <em>이 공정에 쓰이는 공구 모두 기재</em></label>
       <div class="ptbl">
-        <div class="ptbl-hdr">
-          <span>No</span>
-          <span>공구명 · 팁모델</span>
-          <span>T번호</span>
-        </div>
+        <div class="ptbl-hdr"><span>No</span><span>공구명 · 팁모델</span><span>T번호</span></div>
         <div id="ptbl-rows"></div>
       </div>
     </div>
-
     <div class="div"></div>
-
-    <!-- 공구 교체 기록 -->
     <div class="f">
       <label class="fl">공구 교체 기록 <em>교체 발생 항목만 입력</em></label>
       <div id="tcards"></div>
     </div>
-
     <div class="nav"><button class="nbp" onclick="go(5)">← 이전</button><button class="nbn" onclick="go(7)">다음 →</button></div>
   </div>
-
-  <!-- S7 특이사항 -->
+  <!-- S7 -->
   <div class="sec" id="s7">
     <div class="sec-h">⑦ 특이사항 · 서명</div>
     <div class="f"><label class="fl">특이사항 <em>자유 기술</em></label>
@@ -334,22 +308,19 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
       <div class="f"><label class="fl">반장</label><input type="text" id="d-s2" placeholder="서명"></div>
       <div class="f"><label class="fl">관리자</label><input type="text" id="d-s3" placeholder="서명"></div>
     </div>
-    <div class="nav"><button class="nbp" onclick="go(6)">← 이전</button><button class="nbs" onclick="save()">💾 저장 및 전송</button></div>
+    <div class="nav"><button class="nbp" onclick="go(6)">← 이전</button><button class="nbs" id="save-btn" onclick="save()">💾 저장 및 전송</button></div>
   </div>
 </div>
-
-<!-- DASHBOARD -->
 <div id="vd" style="display:none" class="dash"><div id="dash-content"></div></div>
-
 </div>
 
 <!-- Settings Modal -->
 <div class="overlay" id="overlay" onclick="closeSettings(event)">
 <div class="modal" id="modal">
   <div class="mhdr"><span>⚙️ 서버 연동 설정</span><span class="mclose" onclick="closeSettings()">×</span></div>
-  <p style="font-size:13px;color:#888;margin-bottom:14px;line-height:1.7">Google Apps Script를 무료 서버로 사용합니다.<br>아래 단계를 따라 한 번만 설정하면 됩니다.</p>
+  <p style="font-size:13px;color:#888;margin-bottom:14px;line-height:1.7">Google Apps Script를 무료 서버로 사용합니다.</p>
   <ol class="guide">
-    <li><b>구글 시트</b> 새로 만들기 → 이름 자유롭게 입력</li>
+    <li><b>구글 시트</b> 새로 만들기</li>
     <li>상단 메뉴 <b>확장 프로그램 → Apps Script</b> 클릭</li>
     <li>기존 코드 전체 삭제 후 아래 코드 <b>붙여넣기</b></li>
     <li><b>💾 저장</b> → <b>배포 → 새 배포</b> 클릭</li>
@@ -365,47 +336,49 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   <button class="save-url" onclick="saveUrl()">✅ 저장하고 연결하기</button>
 </div>
 </div>
-
 <div class="toast" id="toast"></div>
 
 <script>
 const DAYS=['일','월','화','수','목','금','토'];
 const SNAMES=['기본정보','기계가동','수주소재','생산실적','시간기록','공구관리','특이사항'];
 const LKEY='hg_logs', UKEY='hg_url';
-let cur=1, opMin=0;
+const MACHINES=['전체','CNC선반1','CNC선반2','CNC선반3','범용선반','범용밀링','MCT5호기','MCT6호기'];
+let cur=1, opMin=0, imgData='', editingSavedAt='';
+let allLogs=[], filtDate='all', filtMachine='전체', filtFrom='', filtTo='', dashView='list', detailLog=null;
 
 const GAS=`function doPost(e) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.getActiveSheet();
   var d = JSON.parse(e.postData.contents);
+  if (d.action === 'delete') {
+    var rows = sheet.getDataRange().getValues();
+    for (var i = 1; i < rows.length; i++) {
+      try {
+        var rd = JSON.parse(rows[i][7]);
+        if (rd.savedAt === d.savedAt) { sheet.deleteRow(i+1); break; }
+      } catch(err) {}
+    }
+    return ContentService.createTextOutput('{"status":"deleted"}')
+      .setMimeType(ContentService.MimeType.JSON);
+  }
   if (sheet.getLastRow() === 0) {
-    sheet.appendRow(['저장일시','날짜','요일','작업자',
-      '장비','금일생산','불량률','전체데이터']);
+    sheet.appendRow(['저장일시','날짜','요일','작업자','장비','금일생산','불량률','전체데이터']);
     sheet.getRange(1,1,1,8).setFontWeight('bold');
     sheet.setFrozenRows(1);
   }
-  sheet.appendRow([d.savedAt, d.date, d.dow, d.worker,
-    d.machine, d.prod, d.defRate, JSON.stringify(d)]);
-  return ContentService
-    .createTextOutput('{"status":"ok"}')
+  sheet.appendRow([d.savedAt,d.date,d.dow,d.worker,d.machine,d.prod,d.defRate,JSON.stringify(d)]);
+  return ContentService.createTextOutput('{"status":"ok"}')
     .setMimeType(ContentService.MimeType.JSON);
 }
-
 function doGet(e) {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet()
-    .getActiveSheet();
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   var rows = sheet.getDataRange().getValues();
-  if (rows.length < 2)
-    return ContentService.createTextOutput('[]')
-      .setMimeType(ContentService.MimeType.JSON);
+  if (rows.length < 2) return ContentService.createTextOutput('[]').setMimeType(ContentService.MimeType.JSON);
   var data = [];
-  for (var i = rows.length - 1; i >= 1; i--) {
-    try { data.push(JSON.parse(rows[i][7])); }
-    catch(err) {}
+  for (var i = rows.length-1; i >= 1; i--) {
+    try { var d = JSON.parse(rows[i][7]); if (!d.action) data.push(d); } catch(err) {}
   }
-  return ContentService
-    .createTextOutput(JSON.stringify(data))
-    .setMimeType(ContentService.MimeType.JSON);
+  return ContentService.createTextOutput(JSON.stringify(data)).setMimeType(ContentService.MimeType.JSON);
 }`;
 
 document.getElementById('gas-code').textContent = GAS;
@@ -426,7 +399,6 @@ function setDow(){
   if(!v)return;
   document.getElementById('d-dow').textContent=DAYS[new Date(v+'T00:00:00').getDay()]+'요일';
 }
-
 function buildSbar(){
   document.getElementById('sbar').innerHTML=SNAMES.map((n,i)=>{
     const s=i+1,nc=s===cur?' cur':s<cur?' done':'',lc=s===cur?' cur':'';
@@ -434,19 +406,12 @@ function buildSbar(){
       `<div class="si" onclick="go(${s})"><div class="sn${nc}">${s<cur?'✓':s}</div><div class="sl${lc}">${n}</div></div>`;
   }).join('');
 }
-
-// 공정 사용 공구 테이블 (8행)
 function buildPtbl(){
   document.getElementById('ptbl-rows').innerHTML=Array.from({length:8},(_,i)=>{
     const n=i+1;
-    return `<div class="ptbl-row">
-      <div class="ptbl-no">${n}</div>
-      <input type="text" id="pt-n${n}" placeholder="예: DNMG150608-MA">
-      <input type="text" id="pt-t${n}" placeholder="T0${n<=9?n:''}">
-    </div>`;
+    return `<div class="ptbl-row"><div class="ptbl-no">${n}</div><input type="text" id="pt-n${n}" placeholder="예: DNMG150608-MA"><input type="text" id="pt-t${n}" placeholder="T0${n}"></div>`;
   }).join('');
 }
-
 function buildTcards(){
   document.getElementById('tcards').innerHTML=Array.from({length:5},(_,i)=>{
     const n=i+1;
@@ -479,16 +444,33 @@ function buildTcards(){
 function go(n){
   if(n<1||n>7)return;
   document.getElementById('s'+cur).classList.remove('on');
-  cur=n;
-  document.getElementById('s'+cur).classList.add('on');
-  buildSbar();
-  window.scrollTo({top:0,behavior:'smooth'});
+  cur=n; document.getElementById('s'+cur).classList.add('on');
+  buildSbar(); window.scrollTo({top:0,behavior:'smooth'});
 }
 function pick(el){
   const g=el.dataset.g;
   document.querySelectorAll(`[data-g="${g}"]`).forEach(b=>b.classList.remove('on'));
   el.classList.add('on');
   if(g==='cool') document.getElementById('cd-row').style.display=el.dataset.v==='교체'?'':'none';
+}
+
+// ── image ─────────────────────────────────────────
+function previewImg(input){
+  const file=input.files[0]; if(!file)return;
+  const r=new FileReader();
+  r.onload=e=>{
+    imgData=e.target.result;
+    document.getElementById('img-preview-src').src=imgData;
+    document.getElementById('img-preview').style.display='';
+  };
+  r.readAsDataURL(file);
+}
+function clearImg(){
+  imgData='';
+  document.getElementById('img-preview').style.display='none';
+  document.getElementById('img-preview-src').src='';
+  document.getElementById('d-img-cam').value='';
+  document.getElementById('d-img-file').value='';
 }
 
 // ── calc ──────────────────────────────────────────
@@ -521,32 +503,10 @@ function cTimes(){
   if(mt&&mt>0&&cyc>0&&prod>0) setTx('d-eff',Math.round(prod*cyc/mt*100)+' %');
 }
 
-// ── image ─────────────────────────────────────────
-let imgData='';
-function previewImg(input,type){
-  const file=input.files[0]; if(!file)return;
-  const r=new FileReader();
-  r.onload=e=>{
-    imgData=e.target.result;
-    document.getElementById('img-preview-src').src=imgData;
-    document.getElementById('img-preview').style.display='';
-  };
-  r.readAsDataURL(file);
-}
-function clearImg(){
-  imgData='';
-  document.getElementById('img-preview').style.display='none';
-  document.getElementById('img-preview-src').src='';
-  document.getElementById('d-img-cam').value='';
-  document.getElementById('d-img-file').value='';
-}
-
 // ── collect ───────────────────────────────────────
 function collect(){
-  // 공정 사용 공구
   const processTools=[];
-  for(let i=1;i<=8;i++){const n=gv(`pt-n${i}`);if(n) processTools.push({no:i,name:n,tNum:gv(`pt-t${i}`)});}
-  // 공구 교체
+  for(let i=1;i<=8;i++){const n=gv(`pt-n${i}`);if(n)processTools.push({no:i,name:n,tNum:gv(`pt-t${i}`)});}
   const tools=[];
   for(let i=1;i<=5;i++){const n=gv(`tc-n${i}`);if(n)tools.push({no:i,name:n,tNum:gv(`tc-t${i}`),price:gn(`tc-p${i}`),prevQty:gn(`tc-q${i}`),time:gv(`tc-tm${i}`),life:gn(`tc-l${i}`),reason:gg(`tr${i}`),spMax:gn(`tc-sm${i}`),spAvg:gn(`tc-sa${i}`)});}
   return{
@@ -562,9 +522,8 @@ function collect(){
     suStart:gv('d-sus'),suEnd:gv('d-sue'),suTime:tx('d-sut'),
     mcStart:gv('d-mcs'),mcEnd:gv('d-mce'),mcTime:tx('d-mct'),
     cycM:gn('d-cym'),cycS:gn('d-cys'),eff:tx('d-eff'),
-    processTools, tools,
+    processTools,tools,drawingImg:imgData,
     notes:gv('d-notes'),s1:gv('d-s1'),s2:gv('d-s2'),s3:gv('d-s3'),
-    drawingImg:imgData,
     savedAt:new Date().toISOString()
   };
 }
@@ -574,14 +533,24 @@ async function save(){
   const d=collect();
   if(!d.date){toast('❗ 날짜를 입력해주세요',1);return;}
   if(!d.worker){toast('❗ 작업자 이름을 입력해주세요',1);return;}
-  try{const logs=JSON.parse(localStorage.getItem(LKEY)||'[]');logs.unshift(d);localStorage.setItem(LKEY,JSON.stringify(logs.slice(0,500)));}catch(e){}
   const url=localStorage.getItem(UKEY);
+  // 수정 모드: 기존 기록 먼저 삭제
+  if(editingSavedAt){
+    try{
+      const logs=JSON.parse(localStorage.getItem(LKEY)||'[]');
+      localStorage.setItem(LKEY,JSON.stringify(logs.filter(l=>l.savedAt!==editingSavedAt)));
+    }catch(e){}
+    if(url){
+      try{await fetch(url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'delete',savedAt:editingSavedAt})});}catch(e){}
+    }
+    editingSavedAt='';
+    document.getElementById('save-btn').textContent='💾 저장 및 전송';
+  }
+  try{const logs=JSON.parse(localStorage.getItem(LKEY)||'[]');logs.unshift(d);localStorage.setItem(LKEY,JSON.stringify(logs.slice(0,500)));}catch(e){}
   if(url){
     try{await fetch(url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(d)});toast('✅ 저장 완료! 서버로 전송됐습니다.');}
     catch(e){toast('💾 로컬 저장됨 (서버 전송 실패)',1);}
-  } else {
-    toast('💾 로컬에 저장됐습니다 (서버 미설정)');
-  }
+  }else{toast('💾 로컬에 저장됐습니다');}
 }
 
 // ── tabs ──────────────────────────────────────────
@@ -594,21 +563,12 @@ function showTab(t){
 }
 
 // ── dashboard ─────────────────────────────────────
-let allLogs=[], filtDate='all', filtMachine='전체', dashView='list', detailLog=null;
-let filtFrom='', filtTo='';
-
-function setFiltDate(){
-  filtFrom=document.getElementById('filt-from')?.value||'';
-  filtTo=document.getElementById('filt-to')?.value||'';
-  renderDash();
-}
-
 async function loadDash(){
   const c=document.getElementById('dash-content');
   const url=localStorage.getItem(UKEY);
   if(!url){
-    c.innerHTML=`<div class="setup-box"><p>📡 서버가 연결되지 않았습니다.<br>⚙️ 설정 버튼을 눌러 Google Apps Script URL을 입력하면<br>모든 작업자의 데이터를 이곳에서 확인할 수 있습니다.</p><button class="setup-btn" onclick="openSettings()">⚙️ 지금 설정하기</button></div>`;
-    try{const local=JSON.parse(localStorage.getItem(LKEY)||'[]');if(local.length){c.innerHTML+=`<p style="font-size:13px;color:#888;margin-bottom:10px">📱 이 기기의 로컬 데이터 (${local.length}건)</p>`;allLogs=local;renderDash();}}catch(e){}
+    c.innerHTML=`<div class="setup-box"><p>📡 서버가 연결되지 않았습니다.<br>⚙️ 설정 버튼을 눌러 URL을 입력해주세요.</p><button class="setup-btn" onclick="openSettings()">⚙️ 지금 설정하기</button></div>`;
+    try{const local=JSON.parse(localStorage.getItem(LKEY)||'[]');if(local.length){c.innerHTML+=`<p style="font-size:13px;color:#888;margin-bottom:10px">📱 이 기기 로컬 데이터 (${local.length}건)</p>`;allLogs=local;renderDash();}}catch(e){}
     return;
   }
   c.innerHTML='<div class="loading">⏳ 데이터를 불러오는 중...</div>';
@@ -619,7 +579,7 @@ async function loadDash(){
     renderDash();
   }catch(e){
     try{allLogs=JSON.parse(localStorage.getItem(LKEY)||'[]');}catch(err){allLogs=[];}
-    c.innerHTML=`<div style="background:#fff3f3;border:1px solid #f5c5c5;border-radius:10px;padding:12px;font-size:13px;color:#7a0000;margin-bottom:12px">⚠️ 서버 연결 실패. 이 기기의 로컬 데이터를 표시합니다.</div>`;
+    c.innerHTML=`<div style="background:#fff3f3;border:1px solid #f5c5c5;border-radius:10px;padding:12px;font-size:13px;color:#7a0000;margin-bottom:12px">⚠️ 서버 연결 실패. 로컬 데이터를 표시합니다.</div>`;
     if(allLogs.length) renderDash();
     else document.getElementById('dash-content').innerHTML+='<div class="empty"><div class="ic">📋</div><p>저장된 데이터가 없습니다</p></div>';
   }
@@ -629,7 +589,7 @@ function renderDash(){
   if(dashView==='detail'){renderDetail();return;}
   const today=new Date().toISOString().split('T')[0];
   const weekAgo=new Date(Date.now()-7*86400000).toISOString().split('T')[0];
-  let logs=allLogs.filter(d=>{
+  const logs=allLogs.filter(d=>{
     if(filtDate==='today'&&d.date!==today) return false;
     if(filtDate==='week'&&d.date<weekAgo) return false;
     if(filtDate==='pick'){
@@ -641,8 +601,13 @@ function renderDash(){
   });
   const todayLogs=allLogs.filter(d=>d.date===today);
   const totProd=todayLogs.reduce((a,d)=>a+(+d.prod||0),0);
-  const avgDef=todayLogs.length?(todayLogs.reduce((a,d)=>a+parseFloat(d.defRate)||0,0)/todayLogs.length).toFixed(1):'-';
+  const avgDef=todayLogs.length?(todayLogs.reduce((a,d)=>a+(parseFloat(d.defRate)||0),0)/todayLogs.length).toFixed(1):'-';
   const url=localStorage.getItem(UKEY);
+  const datePickHtml=filtDate==='pick'?`<div style="display:flex;gap:8px;margin-bottom:8px;align-items:center">
+    <input type="date" id="filt-from" value="${filtFrom}" onchange="filtFrom=this.value;renderDash()" style="flex:1;font-size:15px;padding:8px 10px;border-radius:9px;border:1.5px solid #ccc;background:#fff;font-family:inherit">
+    <span style="font-size:14px;color:#888">~</span>
+    <input type="date" id="filt-to" value="${filtTo}" onchange="filtTo=this.value;renderDash()" style="flex:1;font-size:15px;padding:8px 10px;border-radius:9px;border:1.5px solid #ccc;background:#fff;font-family:inherit">
+  </div>`:'';
   document.getElementById('dash-content').innerHTML=
     `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
        ${url?`<span class="conn-ok"><span class="dot"></span>서버 연결됨</span>`:'<span style="font-size:13px;color:#888">로컬 데이터</span>'}
@@ -654,173 +619,124 @@ function renderDash(){
        <div class="stat"><div class="sl2">평균 불량률</div><div class="sv" style="font-size:18px">${avgDef}${avgDef!=='-'?'%':''}</div><div class="su">오늘</div></div>
      </div>
      <div class="frow">
-       <button class="ftag ${filtDate==='today'?'on':''}" onclick="setFilt('date','today')">오늘</button>
-       <button class="ftag ${filtDate==='week'?'on':''}" onclick="setFilt('date','week')">이번주</button>
-       <button class="ftag ${filtDate==='all'?'on':''}" onclick="setFilt('date','all')">전체</button>
-       <button class="ftag ${filtDate==='pick'?'on':''}" onclick="setFilt('date','pick')">날짜선택</button>
+       <button class="ftag ${filtDate==='today'?'on':''}" onclick="filtDate='today';renderDash()">오늘</button>
+       <button class="ftag ${filtDate==='week'?'on':''}" onclick="filtDate='week';renderDash()">이번주</button>
+       <button class="ftag ${filtDate==='all'?'on':''}" onclick="filtDate='all';renderDash()">전체</button>
+       <button class="ftag ${filtDate==='pick'?'on':''}" onclick="filtDate='pick';renderDash()">날짜선택</button>
      </div>
-     ${filtDate==='pick'?`<div style="display:flex;gap:8px;margin-bottom:12px;align-items:center">
-       <input type="date" id="filt-from" value="${filtFrom}" onchange="setFiltDate()" style="flex:1;font-size:15px;padding:8px 10px;border-radius:9px;border:1.5px solid #ccc;background:#fff;font-family:inherit">
-       <span style="font-size:14px;color:#888">~</span>
-       <input type="date" id="filt-to" value="${filtTo}" onchange="setFiltDate()" style="flex:1;font-size:15px;padding:8px 10px;border-radius:9px;border:1.5px solid #ccc;background:#fff;font-family:inherit">
-     </div>`:''}
+     ${datePickHtml}
      <div class="frow">
-       <select class="fsel" onchange="setFilt('machine',this.value)">
-         ${['전체','CNC선반1','CNC선반2','CNC선반3','범용선반','범용밀링','MCT5호기','MCT6호기'].map(m=>`<option ${filtMachine===m?'selected':''}>${m}</option>`).join('')}
+       <select class="fsel" onchange="filtMachine=this.value;renderDash()">
+         ${MACHINES.map(m=>`<option ${filtMachine===m?'selected':''}>${m}</option>`).join('')}
        </select>
      </div>
      <div style="font-size:13px;color:#888;margin-bottom:10px">${logs.length}건 조회됨</div>`+
     (logs.length?logs.map(d=>{
       const rate=parseFloat(d.defRate)||0;
       return `<div class="li">
-        <div style="flex:1" onclick="showDetail(${allLogs.indexOf(d)})">
+        <div style="flex:1;cursor:pointer" onclick="showDetail(${allLogs.indexOf(d)})">
           <div class="ld">${d.date} (${d.dow||'-'})</div>
           <div class="li2">${d.worker||'-'} · ${d.machine||'-'}</div>
           <div class="li2" style="margin-top:2px">생산 ${d.prod||0}EA · 불량률 ${d.defRate||'0%'}</div>
         </div>
-        <span class="lbadge ${rate>5?'r':'g'}" style="margin-right:6px">${rate>5?'불량주의':'정상'}</span>
-        <button onclick="editLog(${allLogs.indexOf(d)})" style="background:#E6F1FB;border:1px solid #378ADD;color:#185FA5;border-radius:7px;padding:6px 10px;font-size:13px;cursor:pointer;font-family:inherit;font-weight:600;flex-shrink:0;margin-right:4px">수정</button>
-        <button onclick="delLog('${d.savedAt}')" style="background:#FCEBEB;border:1px solid #f09595;color:#A32D2D;border-radius:7px;padding:6px 10px;font-size:13px;cursor:pointer;font-family:inherit;font-weight:600;flex-shrink:0">삭제</button>
+        <span class="lbadge ${rate>5?'r':'g'}">${rate>5?'불량주의':'정상'}</span>
+        <button onclick="editLog(${allLogs.indexOf(d)})" style="background:#E6F1FB;border:1px solid #378ADD;color:#185FA5;border-radius:7px;padding:6px 10px;font-size:13px;cursor:pointer;font-family:inherit;font-weight:600;flex-shrink:0;margin-left:4px">수정</button>
+        <button onclick="delLog('${d.savedAt}')" style="background:#FCEBEB;border:1px solid #f09595;color:#A32D2D;border-radius:7px;padding:6px 10px;font-size:13px;cursor:pointer;font-family:inherit;font-weight:600;flex-shrink:0;margin-left:4px">삭제</button>
       </div>`;
     }).join(''):'<div class="empty"><div class="ic">🔍</div><p>조건에 맞는 데이터가 없습니다</p></div>');
-}
-
-function setFilt(type,val){
-  if(type==='date') filtDate=val; else filtMachine=val;
-  renderDash();
-}
-
-function editLog(i){
-  const d=allLogs[i]; if(!d) return;
-  // 기본정보
-  document.getElementById('d-date').value=d.date||'';
-  setDow();
-  document.getElementById('d-worker').value=d.worker||'';
-  if(d.machine) document.querySelectorAll('[data-g="machine"]').forEach(b=>{if(b.dataset.v===d.machine)b.classList.add('on');else b.classList.remove('on');});
-  // 기계가동
-  document.getElementById('d-on').value=d.powerOn||'';
-  document.getElementById('d-off').value=d.powerOff||'';
-  cOp();
-  const stops=['t','a','s','m','md','d','o'];
-  stops.forEach((k,idx)=>{if(d.stop)document.getElementById('st'+idx).value=d.stop[k]||0;});
-  cStop();
-  if(d.coolant) document.querySelectorAll('[data-g="cool"]').forEach(b=>{if(b.dataset.v===d.coolant)b.classList.add('on');else b.classList.remove('on');});
-  document.getElementById('cd-row').style.display=d.coolant==='교체'?'':'none';
-  document.getElementById('d-cooldt').value=d.coolantDate||'';
-  // 수주소재
-  document.getElementById('d-client').value=d.client||'';
-  document.getElementById('d-product').value=d.product||'';
-  document.getElementById('d-mat').value=d.material||'';
-  document.getElementById('d-spec').value=d.spec||'';
-  document.getElementById('d-order').value=d.order||0;
-  document.getElementById('d-stock').value=d.stock||0;
-  document.getElementById('d-plan').value=d.plan||0;
-  document.getElementById('d-lot').value=d.lot||'';
-  document.getElementById('d-deadline').value=d.deadline||'';
-  if(d.drawingImg){imgData=d.drawingImg;document.getElementById('img-preview-src').src=imgData;document.getElementById('img-preview').style.display='';}
-  // 생산실적
-  document.getElementById('d-prod').value=d.prod||0;
-  document.getElementById('d-good').value=d.good||0;
-  document.getElementById('d-defect').value=d.defect||0;
-  document.getElementById('d-nc').value=d.nc||0;
-  cDef();
-  if(d.defTypes){document.getElementById('dt0').value=d.defTypes.dim||0;document.getElementById('dt1').value=d.defTypes.app||0;document.getElementById('dt2').value=d.defTypes.burr||0;document.getElementById('dt3').value=d.defTypes.crack||0;document.getElementById('dt4').value=d.defTypes.tool||0;document.getElementById('dt5').value=d.defTypes.rework||0;}
-  document.getElementById('d-dreason').value=d.defReason||'';
-  // 시간기록
-  document.getElementById('d-sus').value=d.suStart||'';
-  document.getElementById('d-sue').value=d.suEnd||'';
-  document.getElementById('d-mcs').value=d.mcStart||'';
-  document.getElementById('d-mce').value=d.mcEnd||'';
-  document.getElementById('d-cym').value=d.cycM||0;
-  document.getElementById('d-cys').value=d.cycS||0;
-  cTimes();
-  // 공정공구
-  if(d.processTools) d.processTools.forEach(t=>{const ni=document.getElementById(`pt-n${t.no}`);const ti=document.getElementById(`pt-t${t.no}`);if(ni)ni.value=t.name||'';if(ti)ti.value=t.tNum||'';});
-  // 공구교체
-  if(d.tools) d.tools.forEach(t=>{const ni=document.getElementById(`tc-n${t.no}`);if(ni){ni.value=t.name||'';document.getElementById(`tc-t${t.no}`).value=t.tNum||'';document.getElementById(`tc-p${t.no}`).value=t.price||0;document.getElementById(`tc-q${t.no}`).value=t.prevQty||0;document.getElementById(`tc-tm${t.no}`).value=t.time||'';document.getElementById(`tc-l${t.no}`).value=t.life||0;document.getElementById(`tc-sm${t.no}`).value=t.spMax||0;document.getElementById(`tc-sa${t.no}`).value=t.spAvg||0;if(t.reason)document.querySelectorAll(`[data-g="tr${t.no}"]`).forEach(b=>{if(b.dataset.v===t.reason)b.classList.add('on');else b.classList.remove('on');});}});
-  // 특이사항
-  document.getElementById('d-notes').value=d.notes||'';
-  document.getElementById('d-s1').value=d.s1||'';
-  document.getElementById('d-s2').value=d.s2||'';
-  document.getElementById('d-s3').value=d.s3||'';
-  // 작성 탭으로 이동
-  showTab('w');
-  go(1);
-  toast('✏️ 수정 모드 — 내용 수정 후 저장하세요');
-}
-
-async function delLog(savedAt){
-  if(!confirm('이 작업일지를 삭제하시겠습니까?')) return;
-  // 로컬 삭제
-  try{
-    const logs=JSON.parse(localStorage.getItem(LKEY)||'[]');
-    const filtered=logs.filter(d=>d.savedAt!==savedAt);
-    localStorage.setItem(LKEY,JSON.stringify(filtered));
-  }catch(e){}
-  // 서버 삭제
-  const url=localStorage.getItem(UKEY);
-  if(url){
-    try{
-      await fetch(url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},
-        body:JSON.stringify({action:'delete',savedAt})});
-    }catch(e){}
-  }
-  allLogs=allLogs.filter(d=>d.savedAt!==savedAt);
-  toast('🗑️ 삭제되었습니다');
-  renderDash();
 }
 
 function showDetail(i){detailLog=allLogs[i];dashView='detail';renderDetail();}
 
 function renderDetail(){
-  const d=detailLog; if(!d) return;
+  const d=detailLog; if(!d)return;
   const r=(l1,v1,l2,v2)=>`<tr><td>${l1}</td><td>${v1||'-'}</td><td>${l2}</td><td>${v2||'-'}</td></tr>`;
-  const ptRows=d.processTools&&d.processTools.length
-    ?`<div style="background:#f5f2ed;border-radius:9px;padding:13px;font-size:14px;margin-bottom:9px">
-        <strong style="display:block;margin-bottom:8px">공정 사용 공구</strong>
-        <table style="width:100%;font-size:13px;border-collapse:collapse">
-          <tr style="background:#e8e5e0"><td style="padding:5px 8px;font-weight:700">No</td><td style="padding:5px 8px;font-weight:700">공구명</td><td style="padding:5px 8px;font-weight:700">T번호</td></tr>
-          ${d.processTools.map(t=>`<tr style="border-top:1px solid #e0ddd8"><td style="padding:5px 8px;color:#888">${t.no}</td><td style="padding:5px 8px;font-weight:600">${t.name}</td><td style="padding:5px 8px">${t.tNum||'-'}</td></tr>`).join('')}
-        </table>
-      </div>`:'';
+  const ptRows=d.processTools&&d.processTools.length?`<div style="background:#f5f2ed;border-radius:9px;padding:13px;font-size:14px;margin-bottom:9px">
+    <strong style="display:block;margin-bottom:8px">공정 사용 공구</strong>
+    <table style="width:100%;font-size:13px;border-collapse:collapse">
+      <tr style="background:#e8e5e0"><td style="padding:5px 8px;font-weight:700">No</td><td style="padding:5px 8px;font-weight:700">공구명</td><td style="padding:5px 8px;font-weight:700">T번호</td></tr>
+      ${d.processTools.map(t=>`<tr style="border-top:1px solid #e0ddd8"><td style="padding:5px 8px;color:#888">${t.no}</td><td style="padding:5px 8px;font-weight:600">${t.name}</td><td style="padding:5px 8px">${t.tNum||'-'}</td></tr>`).join('')}
+    </table></div>`:'';
+  const imgHtml=d.drawingImg?`<div style="margin-bottom:9px"><strong style="font-size:14px;display:block;margin-bottom:6px">도면 사진</strong><img src="${d.drawingImg}" style="width:100%;border-radius:10px;border:1.5px solid #e0ddd8;max-height:300px;object-fit:contain;background:#f5f2ed"></div>`:'';
   document.getElementById('dash-content').innerHTML=
     `<button class="bk" onclick="dashView='list';renderDash()">← 목록으로</button>
      <div style="background:#fff;border:1px solid #e0ddd8;border-radius:12px;padding:16px;margin-bottom:10px">
        <h2 style="font-size:17px;font-weight:700;margin-bottom:13px">${d.date} (${d.dow||''}) 작업일지</h2>
        <table class="dtbl">
-         ${r('작업자',d.worker,'장비',d.machine)}
-         ${r('절삭유',d.coolant,'가동률',d.opRate)}
-         ${r('전원 ON',d.powerOn,'전원 OFF',d.powerOff)}
-         ${r('거래처',d.client,'품명',d.product)}
-         ${r('재질',d.material,'소재규격',d.spec)}
-         ${r('총발주',(d.order||0)+'EA','납기',d.deadline)}
-         ${r('금일생산',(d.prod||0)+'EA','양품',(d.good||0)+'EA')}
-         ${r('불량',(d.defect||0)+'EA','불량률',d.defRate)}
-         ${r('셋업시간',d.suTime,'실가공',d.mcTime)}
-         ${r('효율',d.eff,'사이클타임',(d.cycM||0)+'분 '+(d.cycS||0)+'초')}
+         ${r('작업자',d.worker,'장비',d.machine)}${r('절삭유',d.coolant,'가동률',d.opRate)}
+         ${r('전원 ON',d.powerOn,'전원 OFF',d.powerOff)}${r('거래처',d.client,'품명',d.product)}
+         ${r('재질',d.material,'소재규격',d.spec)}${r('총발주',(d.order||0)+'EA','납기',d.deadline)}
+         ${r('금일생산',(d.prod||0)+'EA','양품',(d.good||0)+'EA')}${r('불량',(d.defect||0)+'EA','불량률',d.defRate)}
+         ${r('셋업시간',d.suTime,'실가공',d.mcTime)}${r('효율',d.eff,'사이클타임',(d.cycM||0)+'분 '+(d.cycS||0)+'초')}
          ${r('작업자',d.s1,'반장',d.s2)}
        </table>
      </div>
-     ${ptRows}
+     ${imgHtml}${ptRows}
      ${d.notes?`<div style="background:#f5f2ed;border-radius:9px;padding:13px;font-size:14px;margin-bottom:9px;line-height:1.7"><strong>특이사항:</strong><br>${d.notes}</div>`:''}
      ${d.tools&&d.tools.length?`<div style="background:#f5f2ed;border-radius:9px;padding:13px;font-size:13px"><strong>공구 교체:</strong><br>${d.tools.map(t=>`T${t.tNum} ${t.name} — ${t.reason}`).join('<br>')}</div>`:''}`;
 }
 
+// ── edit ──────────────────────────────────────────
+function editLog(i){
+  const d=allLogs[i]; if(!d)return;
+  editingSavedAt=d.savedAt;
+  document.getElementById('d-date').value=d.date||''; setDow();
+  document.getElementById('d-worker').value=d.worker||'';
+  document.querySelectorAll('[data-g="machine"]').forEach(b=>b.classList.toggle('on',b.dataset.v===d.machine));
+  document.getElementById('d-on').value=d.powerOn||''; document.getElementById('d-off').value=d.powerOff||''; cOp();
+  const sk=['t','a','s','m','md','d','o'];
+  sk.forEach((k,idx)=>{if(d.stop)document.getElementById('st'+idx).value=d.stop[k]||0;}); cStop();
+  document.querySelectorAll('[data-g="cool"]').forEach(b=>b.classList.toggle('on',b.dataset.v===d.coolant));
+  document.getElementById('cd-row').style.display=d.coolant==='교체'?'':'none';
+  document.getElementById('d-cooldt').value=d.coolantDate||'';
+  document.getElementById('d-client').value=d.client||''; document.getElementById('d-product').value=d.product||'';
+  document.getElementById('d-mat').value=d.material||''; document.getElementById('d-spec').value=d.spec||'';
+  document.getElementById('d-order').value=d.order||0; document.getElementById('d-stock').value=d.stock||0;
+  document.getElementById('d-plan').value=d.plan||0; document.getElementById('d-lot').value=d.lot||'';
+  document.getElementById('d-deadline').value=d.deadline||'';
+  if(d.drawingImg){imgData=d.drawingImg;document.getElementById('img-preview-src').src=imgData;document.getElementById('img-preview').style.display='';}
+  else{imgData='';document.getElementById('img-preview').style.display='none';}
+  document.getElementById('d-prod').value=d.prod||0; document.getElementById('d-good').value=d.good||0;
+  document.getElementById('d-defect').value=d.defect||0; document.getElementById('d-nc').value=d.nc||0; cDef();
+  if(d.defTypes){['dim','app','burr','crack','tool','rework'].forEach((k,i)=>document.getElementById('dt'+i).value=d.defTypes[k]||0);}
+  document.getElementById('d-dreason').value=d.defReason||'';
+  document.getElementById('d-sus').value=d.suStart||''; document.getElementById('d-sue').value=d.suEnd||'';
+  document.getElementById('d-mcs').value=d.mcStart||''; document.getElementById('d-mce').value=d.mcEnd||'';
+  document.getElementById('d-cym').value=d.cycM||0; document.getElementById('d-cys').value=d.cycS||0; cTimes();
+  if(d.processTools) d.processTools.forEach(t=>{const ni=document.getElementById(`pt-n${t.no}`);const ti=document.getElementById(`pt-t${t.no}`);if(ni){ni.value=t.name||'';ti.value=t.tNum||'';}});
+  if(d.tools) d.tools.forEach(t=>{
+    const ni=document.getElementById(`tc-n${t.no}`); if(!ni)return;
+    ni.value=t.name||''; document.getElementById(`tc-t${t.no}`).value=t.tNum||'';
+    document.getElementById(`tc-p${t.no}`).value=t.price||0; document.getElementById(`tc-q${t.no}`).value=t.prevQty||0;
+    document.getElementById(`tc-tm${t.no}`).value=t.time||''; document.getElementById(`tc-l${t.no}`).value=t.life||0;
+    document.getElementById(`tc-sm${t.no}`).value=t.spMax||0; document.getElementById(`tc-sa${t.no}`).value=t.spAvg||0;
+    document.querySelectorAll(`[data-g="tr${t.no}"]`).forEach(b=>b.classList.toggle('on',b.dataset.v===t.reason));
+  });
+  document.getElementById('d-notes').value=d.notes||'';
+  document.getElementById('d-s1').value=d.s1||''; document.getElementById('d-s2').value=d.s2||''; document.getElementById('d-s3').value=d.s3||'';
+  document.getElementById('save-btn').textContent='✏️ 수정 저장';
+  showTab('w'); go(1);
+  toast('✏️ 수정 모드 — 내용 수정 후 저장하세요');
+}
+
+// ── delete ────────────────────────────────────────
+async function delLog(savedAt){
+  if(!confirm('이 작업일지를 삭제하시겠습니까?'))return;
+  try{const logs=JSON.parse(localStorage.getItem(LKEY)||'[]');localStorage.setItem(LKEY,JSON.stringify(logs.filter(d=>d.savedAt!==savedAt)));}catch(e){}
+  const url=localStorage.getItem(UKEY);
+  if(url){try{await fetch(url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'delete',savedAt})});}catch(e){}}
+  allLogs=allLogs.filter(d=>d.savedAt!==savedAt);
+  toast('🗑️ 삭제되었습니다'); renderDash();
+}
+
 // ── settings ──────────────────────────────────────
-function openSettings(){
-  document.getElementById('overlay').classList.add('show');
-  document.getElementById('url-inp').value=localStorage.getItem(UKEY)||'';
-}
-function closeSettings(e){
-  if(!e||e.target===document.getElementById('overlay'))
-    document.getElementById('overlay').classList.remove('show');
-}
+function openSettings(){document.getElementById('overlay').classList.add('show');document.getElementById('url-inp').value=localStorage.getItem(UKEY)||'';}
+function closeSettings(e){if(!e||e.target===document.getElementById('overlay'))document.getElementById('overlay').classList.remove('show');}
 function saveUrl(){
   const v=document.getElementById('url-inp').value.trim();
   if(!v){toast('URL을 입력해주세요',1);return;}
   if(!v.includes('script.google.com')){toast('올바른 Apps Script URL이 아닙니다',1);return;}
-  localStorage.setItem(UKEY,v);
-  document.getElementById('overlay').classList.remove('show');
+  localStorage.setItem(UKEY,v); document.getElementById('overlay').classList.remove('show');
   toast('✅ 서버 연결 설정 완료!');
 }
 function copyCode(){
