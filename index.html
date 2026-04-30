@@ -10,9 +10,7 @@ html,body{background:#f0ede8;font-family:-apple-system,BlinkMacSystemFont,'Apple
 .wrap{max-width:680px;margin:0 auto;padding-bottom:60px}
 .hdr{background:#fff;border-bottom:1px solid #e0ddd8;padding:12px 16px;position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between}
 .hdr-l{display:flex;align-items:center;gap:10px}
-.hdr-ic{font-size:24px}
-.hdr-t{font-size:17px;font-weight:700}
-.hdr-s{font-size:11px;color:#999}
+.hdr-ic{font-size:24px}.hdr-t{font-size:17px;font-weight:700}.hdr-s{font-size:11px;color:#999}
 .gear-btn{width:38px;height:38px;border-radius:9px;border:1.5px solid #e0ddd8;background:#f5f2ed;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .tabs{display:flex;background:#fff;border-bottom:2px solid #e8e5e0}
 .tbtn{flex:1;font-size:15px;padding:13px 8px;cursor:pointer;border:none;background:none;color:#888;border-bottom:3px solid transparent;margin-bottom:-2px;font-family:inherit;font-weight:400;transition:all .15s}
@@ -121,6 +119,11 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(12px);background:#1D9E75;color:#fff;padding:12px 20px;border-radius:10px;font-size:15px;font-weight:600;opacity:0;transition:all .25s;z-index:999;pointer-events:none;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.2)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast.err{background:#A32D2D}
+/* 사진 확대 */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:200;display:none;align-items:center;justify-content:center;padding:16px}
+.lightbox.show{display:flex}
+.lightbox img{max-width:100%;max-height:90vh;border-radius:10px;object-fit:contain}
+.lightbox-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.2);color:#fff;border:none;border-radius:50%;width:40px;height:40px;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 </style>
 </head>
 <body>
@@ -135,7 +138,6 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 </div>
 <div id="vw">
   <div class="sbar" id="sbar"></div>
-  <!-- S1 -->
   <div class="sec on" id="s1">
     <div class="sec-h">① 기본 정보</div>
     <div class="r2">
@@ -156,7 +158,6 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     </div>
     <div class="nav"><button class="nbn" onclick="go(2)">다음 →</button></div>
   </div>
-  <!-- S2 -->
   <div class="sec" id="s2">
     <div class="sec-h">② 기계 가동 현황</div>
     <div class="r2">
@@ -190,7 +191,6 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     <div class="f" id="cd-row" style="display:none"><label class="fl">교체 일자</label><input type="date" id="d-cooldt"></div>
     <div class="nav"><button class="nbp" onclick="go(1)">← 이전</button><button class="nbn" onclick="go(3)">다음 →</button></div>
   </div>
-  <!-- S3 -->
   <div class="sec" id="s3">
     <div class="sec-h">③ 수주 · 소재</div>
     <div class="r2">
@@ -215,12 +215,10 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
       <label class="fl">도면 사진 <em>촬영 또는 파일 선택</em></label>
       <div style="display:flex;gap:8px;margin-bottom:10px">
         <label style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:#378ADD;color:#fff;border-radius:10px;padding:13px;font-size:15px;font-weight:600;cursor:pointer">
-          📷 카메라 촬영
-          <input type="file" accept="image/*" capture="environment" id="d-img-cam" style="display:none" onchange="previewImg(this)">
+          📷 카메라 촬영<input type="file" accept="image/*" capture="environment" id="d-img-cam" style="display:none" onchange="previewImg(this)">
         </label>
         <label style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:#f5f2ed;color:#333;border:1.5px solid #ccc;border-radius:10px;padding:13px;font-size:15px;font-weight:600;cursor:pointer">
-          🖼️ 파일 선택
-          <input type="file" accept="image/*" id="d-img-file" style="display:none" onchange="previewImg(this)">
+          🖼️ 파일 선택<input type="file" accept="image/*" id="d-img-file" style="display:none" onchange="previewImg(this)">
         </label>
       </div>
       <div id="img-preview" style="display:none;position:relative;margin-top:6px">
@@ -230,7 +228,6 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     </div>
     <div class="nav"><button class="nbp" onclick="go(2)">← 이전</button><button class="nbn" onclick="go(4)">다음 →</button></div>
   </div>
-  <!-- S4 -->
   <div class="sec" id="s4">
     <div class="sec-h">④ 생산 실적</div>
     <div class="pcards">
@@ -253,7 +250,6 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     <div class="f"><label class="fl">불량 사유</label><input type="text" id="d-dreason" placeholder="예: 공구 마모로 인한 치수 초과"></div>
     <div class="nav"><button class="nbp" onclick="go(3)">← 이전</button><button class="nbn" onclick="go(5)">다음 →</button></div>
   </div>
-  <!-- S5 -->
   <div class="sec" id="s5">
     <div class="sec-h">⑤ 시간 기록</div>
     <div class="f"><label class="fl">셋업 시간</label>
@@ -279,7 +275,6 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     <div class="f"><label class="fl">효율 <em>자동계산</em></label><div class="av" id="d-eff">- %</div></div>
     <div class="nav"><button class="nbp" onclick="go(4)">← 이전</button><button class="nbn" onclick="go(6)">다음 →</button></div>
   </div>
-  <!-- S6 -->
   <div class="sec" id="s6">
     <div class="sec-h">⑥ 공구 관리</div>
     <div class="f">
@@ -296,7 +291,6 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     </div>
     <div class="nav"><button class="nbp" onclick="go(5)">← 이전</button><button class="nbn" onclick="go(7)">다음 →</button></div>
   </div>
-  <!-- S7 -->
   <div class="sec" id="s7">
     <div class="sec-h">⑦ 특이사항 · 서명</div>
     <div class="f"><label class="fl">특이사항 <em>자유 기술</em></label>
@@ -314,9 +308,9 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 <div id="vd" style="display:none" class="dash"><div id="dash-content"></div></div>
 </div>
 
-<!-- Settings Modal -->
+<!-- Settings -->
 <div class="overlay" id="overlay" onclick="closeSettings(event)">
-<div class="modal" id="modal">
+<div class="modal">
   <div class="mhdr"><span>⚙️ 서버 연동 설정</span><span class="mclose" onclick="closeSettings()">×</span></div>
   <p style="font-size:13px;color:#888;margin-bottom:14px;line-height:1.7">Google Apps Script를 무료 서버로 사용합니다.</p>
   <ol class="guide">
@@ -336,15 +330,34 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   <button class="save-url" onclick="saveUrl()">✅ 저장하고 연결하기</button>
 </div>
 </div>
+
+<!-- 사진 확대 -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="">
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
 const DAYS=['일','월','화','수','목','금','토'];
 const SNAMES=['기본정보','기계가동','수주소재','생산실적','시간기록','공구관리','특이사항'];
-const LKEY='hg_logs', UKEY='hg_url';
+const LKEY='hg_logs', UKEY='hg_url', DKEY='hg_deleted', CKEY='hg_cache';
 const MACHINES=['전체','CNC선반1','CNC선반2','CNC선반3','범용선반','범용밀링','MCT5호기','MCT6호기'];
 let cur=1, opMin=0, imgData='', editingSavedAt='';
 let allLogs=[], filtDate='all', filtMachine='전체', filtFrom='', filtTo='', dashView='list', detailLog=null;
+
+// 한국 시간 오늘 날짜
+function kstToday(){
+  return new Date(Date.now()+9*60*60*1000).toISOString().split('T')[0];
+}
+
+// 삭제 목록 관리
+function getDeleted(){try{return JSON.parse(localStorage.getItem(DKEY)||'[]');}catch{return[];}}
+function addDeleted(savedAt){
+  const d=getDeleted(); if(!d.includes(savedAt)){d.push(savedAt); localStorage.setItem(DKEY,JSON.stringify(d.slice(-200)));}
+}
+function filterDeleted(logs){const d=getDeleted(); return logs.filter(l=>!d.includes(l.savedAt)&&!l.action);}
 
 const GAS=`function doPost(e) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -352,23 +365,17 @@ const GAS=`function doPost(e) {
   var d = JSON.parse(e.postData.contents);
   if (d.action === 'delete') {
     var rows = sheet.getDataRange().getValues();
-    for (var i = 1; i < rows.length; i++) {
-      try {
-        var rd = JSON.parse(rows[i][7]);
-        if (rd.savedAt === d.savedAt) { sheet.deleteRow(i+1); break; }
-      } catch(err) {}
+    for (var i = rows.length-1; i >= 1; i--) {
+      try { var rd = JSON.parse(rows[i][7]); if (rd.savedAt === d.savedAt) { sheet.deleteRow(i+1); break; } } catch(err) {}
     }
-    return ContentService.createTextOutput('{"status":"deleted"}')
-      .setMimeType(ContentService.MimeType.JSON);
+    return ContentService.createTextOutput('{"status":"deleted"}').setMimeType(ContentService.MimeType.JSON);
   }
   if (sheet.getLastRow() === 0) {
     sheet.appendRow(['저장일시','날짜','요일','작업자','장비','금일생산','불량률','전체데이터']);
-    sheet.getRange(1,1,1,8).setFontWeight('bold');
-    sheet.setFrozenRows(1);
+    sheet.getRange(1,1,1,8).setFontWeight('bold'); sheet.setFrozenRows(1);
   }
   sheet.appendRow([d.savedAt,d.date,d.dow,d.worker,d.machine,d.prod,d.defRate,JSON.stringify(d)]);
-  return ContentService.createTextOutput('{"status":"ok"}')
-    .setMimeType(ContentService.MimeType.JSON);
+  return ContentService.createTextOutput('{"status":"ok"}').setMimeType(ContentService.MimeType.JSON);
 }
 function doGet(e) {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
@@ -385,8 +392,7 @@ document.getElementById('gas-code').textContent = GAS;
 
 // ── init ──────────────────────────────────────────
 (function(){
-  const t=new Date();
-  const kst=new Date(t.getTime()+9*60*60*1000);
+  const kst=new Date(Date.now()+9*60*60*1000);
   document.getElementById('d-date').value=kst.toISOString().split('T')[0];
   setDow();
   document.getElementById('d-date').addEventListener('change',setDow);
@@ -395,15 +401,13 @@ document.getElementById('gas-code').textContent = GAS;
 })();
 
 function setDow(){
-  const v=document.getElementById('d-date').value;
-  if(!v)return;
+  const v=document.getElementById('d-date').value; if(!v)return;
   document.getElementById('d-dow').textContent=DAYS[new Date(v+'T00:00:00').getDay()]+'요일';
 }
 function buildSbar(){
   document.getElementById('sbar').innerHTML=SNAMES.map((n,i)=>{
     const s=i+1,nc=s===cur?' cur':s<cur?' done':'',lc=s===cur?' cur':'';
-    return (i?'<div class="ssep"></div>':'')+
-      `<div class="si" onclick="go(${s})"><div class="sn${nc}">${s<cur?'✓':s}</div><div class="sl${lc}">${n}</div></div>`;
+    return (i?'<div class="ssep"></div>':'')+`<div class="si" onclick="go(${s})"><div class="sn${nc}">${s<cur?'✓':s}</div><div class="sl${lc}">${n}</div></div>`;
   }).join('');
 }
 function buildPtbl(){
@@ -422,7 +426,7 @@ function buildTcards(){
       </div>
       <div class="r2" style="margin-bottom:10px">
         <div><label class="fl" style="font-size:13px;font-weight:500">단가 (원)</label><input type="number" id="tc-p${n}" min="0" value="0"></div>
-        <div><label class="fl" style="font-size:13px;font-weight:500">교체 전 수량 (EA)</label><input type="number" id="tc-q${n}" min="0" value="0"></div>
+        <div><label class="fl" style="font-size:13px;font-weight:500">교체 전 수량</label><input type="number" id="tc-q${n}" min="0" value="0"></div>
       </div>
       <div class="r2" style="margin-bottom:10px">
         <div><label class="fl" style="font-size:13px;font-weight:500">교체 시각</label><input type="time" id="tc-tm${n}"></div>
@@ -440,7 +444,6 @@ function buildTcards(){
   }).join('');
 }
 
-// ── nav & pick ────────────────────────────────────
 function go(n){
   if(n<1||n>7)return;
   document.getElementById('s'+cur).classList.remove('on');
@@ -453,27 +456,20 @@ function pick(el){
   el.classList.add('on');
   if(g==='cool') document.getElementById('cd-row').style.display=el.dataset.v==='교체'?'':'none';
 }
-
-// ── image ─────────────────────────────────────────
 function previewImg(input){
   const file=input.files[0]; if(!file)return;
   const r=new FileReader();
-  r.onload=e=>{
-    imgData=e.target.result;
-    document.getElementById('img-preview-src').src=imgData;
-    document.getElementById('img-preview').style.display='';
-  };
+  r.onload=e=>{imgData=e.target.result;document.getElementById('img-preview-src').src=imgData;document.getElementById('img-preview').style.display='';};
   r.readAsDataURL(file);
 }
 function clearImg(){
-  imgData='';
-  document.getElementById('img-preview').style.display='none';
+  imgData='';document.getElementById('img-preview').style.display='none';
   document.getElementById('img-preview-src').src='';
-  document.getElementById('d-img-cam').value='';
-  document.getElementById('d-img-file').value='';
+  document.getElementById('d-img-cam').value='';document.getElementById('d-img-file').value='';
 }
+function openLightbox(src){document.getElementById('lightbox-img').src=src;document.getElementById('lightbox').classList.add('show');}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('show');}
 
-// ── calc ──────────────────────────────────────────
 const t2m=v=>{if(!v)return null;const[h,m]=v.split(':').map(Number);return h*60+m;};
 const gn=id=>parseInt(document.getElementById(id)?.value)||0;
 const gv=id=>document.getElementById(id)?.value||'';
@@ -503,7 +499,6 @@ function cTimes(){
   if(mt&&mt>0&&cyc>0&&prod>0) setTx('d-eff',Math.round(prod*cyc/mt*100)+' %');
 }
 
-// ── collect ───────────────────────────────────────
 function collect(){
   const processTools=[];
   for(let i=1;i<=8;i++){const n=gv(`pt-n${i}`);if(n)processTools.push({no:i,name:n,tNum:gv(`pt-t${i}`)});}
@@ -528,32 +523,27 @@ function collect(){
   };
 }
 
-// ── save ──────────────────────────────────────────
 async function save(){
   const d=collect();
   if(!d.date){toast('❗ 날짜를 입력해주세요',1);return;}
   if(!d.worker){toast('❗ 작업자 이름을 입력해주세요',1);return;}
   const url=localStorage.getItem(UKEY);
-  // 수정 모드: 기존 기록 먼저 삭제
   if(editingSavedAt){
-    try{
-      const logs=JSON.parse(localStorage.getItem(LKEY)||'[]');
-      localStorage.setItem(LKEY,JSON.stringify(logs.filter(l=>l.savedAt!==editingSavedAt)));
-    }catch(e){}
-    if(url){
-      try{await fetch(url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'delete',savedAt:editingSavedAt})});}catch(e){}
-    }
+    try{const logs=JSON.parse(localStorage.getItem(LKEY)||'[]');localStorage.setItem(LKEY,JSON.stringify(logs.filter(l=>l.savedAt!==editingSavedAt)));}catch(e){}
+    addDeleted(editingSavedAt);
+    if(url){try{await fetch(url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'delete',savedAt:editingSavedAt})});}catch(e){}}
     editingSavedAt='';
     document.getElementById('save-btn').textContent='💾 저장 및 전송';
   }
   try{const logs=JSON.parse(localStorage.getItem(LKEY)||'[]');logs.unshift(d);localStorage.setItem(LKEY,JSON.stringify(logs.slice(0,500)));}catch(e){}
+  // 캐시 무효화
+  localStorage.removeItem(CKEY);
   if(url){
     try{await fetch(url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(d)});toast('✅ 저장 완료! 서버로 전송됐습니다.');}
     catch(e){toast('💾 로컬 저장됨 (서버 전송 실패)',1);}
   }else{toast('💾 로컬에 저장됐습니다');}
 }
 
-// ── tabs ──────────────────────────────────────────
 function showTab(t){
   ['w','d'].forEach(x=>{
     document.getElementById('tb-'+x).classList.toggle('on',x===t);
@@ -568,40 +558,50 @@ async function loadDash(){
   const url=localStorage.getItem(UKEY);
   if(!url){
     c.innerHTML=`<div class="setup-box"><p>📡 서버가 연결되지 않았습니다.<br>⚙️ 설정 버튼을 눌러 URL을 입력해주세요.</p><button class="setup-btn" onclick="openSettings()">⚙️ 지금 설정하기</button></div>`;
-    try{const local=JSON.parse(localStorage.getItem(LKEY)||'[]');if(local.length){c.innerHTML+=`<p style="font-size:13px;color:#888;margin-bottom:10px">📱 이 기기 로컬 데이터 (${local.length}건)</p>`;allLogs=local;renderDash();}}catch(e){}
+    try{const local=filterDeleted(JSON.parse(localStorage.getItem(LKEY)||'[]'));if(local.length){allLogs=local;renderDash();}}catch(e){}
     return;
   }
-  c.innerHTML='<div class="loading">⏳ 데이터를 불러오는 중...</div>';
+  // 캐시 먼저 표시 (빠른 로딩)
+  try{
+    const cached=JSON.parse(localStorage.getItem(CKEY)||'null');
+    if(cached){allLogs=filterDeleted(cached);renderDash();}
+    else{c.innerHTML='<div class="loading">⏳ 데이터를 불러오는 중...</div>';}
+  }catch(e){c.innerHTML='<div class="loading">⏳ 데이터를 불러오는 중...</div>';}
+  // 백그라운드에서 최신 데이터 fetch
   try{
     const res=await fetch(url+'?v='+Date.now());
     const data=await res.json();
-    allLogs=Array.isArray(data)?data:[];
-    renderDash();
+    if(Array.isArray(data)){
+      localStorage.setItem(CKEY,JSON.stringify(data));
+      allLogs=filterDeleted(data);
+      renderDash();
+    }
   }catch(e){
-    try{allLogs=JSON.parse(localStorage.getItem(LKEY)||'[]');}catch(err){allLogs=[];}
-    c.innerHTML=`<div style="background:#fff3f3;border:1px solid #f5c5c5;border-radius:10px;padding:12px;font-size:13px;color:#7a0000;margin-bottom:12px">⚠️ 서버 연결 실패. 로컬 데이터를 표시합니다.</div>`;
-    if(allLogs.length) renderDash();
-    else document.getElementById('dash-content').innerHTML+='<div class="empty"><div class="ic">📋</div><p>저장된 데이터가 없습니다</p></div>';
+    if(!allLogs.length){
+      try{allLogs=filterDeleted(JSON.parse(localStorage.getItem(LKEY)||'[]'));}catch(err){allLogs=[];}
+      c.innerHTML=`<div style="background:#fff3f3;border:1px solid #f5c5c5;border-radius:10px;padding:12px;font-size:13px;color:#7a0000;margin-bottom:12px">⚠️ 서버 연결 실패. 로컬 데이터를 표시합니다.</div>`;
+      if(allLogs.length) renderDash();
+      else c.innerHTML+='<div class="empty"><div class="ic">📋</div><p>저장된 데이터가 없습니다</p></div>';
+    }
   }
 }
 
 function renderDash(){
   if(dashView==='detail'){renderDetail();return;}
-  const today=new Date().toISOString().split('T')[0];
-  const weekAgo=new Date(Date.now()-7*86400000).toISOString().split('T')[0];
+  const today=kstToday();
+  const weekAgo=new Date(Date.now()-7*86400000+9*60*60*1000).toISOString().split('T')[0];
   const logs=allLogs.filter(d=>{
     if(filtDate==='today'&&d.date!==today) return false;
     if(filtDate==='week'&&d.date<weekAgo) return false;
-    if(filtDate==='pick'){
-      if(filtFrom&&d.date<filtFrom) return false;
-      if(filtTo&&d.date>filtTo) return false;
-    }
+    if(filtDate==='pick'){if(filtFrom&&d.date<filtFrom)return false;if(filtTo&&d.date>filtTo)return false;}
     if(filtMachine!=='전체'&&d.machine!==filtMachine) return false;
     return true;
   });
+  // 오늘 통계 — KST 기준
   const todayLogs=allLogs.filter(d=>d.date===today);
-  const totProd=todayLogs.reduce((a,d)=>a+(+d.prod||0),0);
-  const avgDef=todayLogs.length?(todayLogs.reduce((a,d)=>a+(parseFloat(d.defRate)||0),0)/todayLogs.length).toFixed(1):'-';
+  const totProd=todayLogs.reduce((a,d)=>a+(parseInt(d.prod)||0),0);
+  const defRates=todayLogs.map(d=>parseFloat(d.defRate)).filter(v=>!isNaN(v));
+  const avgDef=defRates.length?(defRates.reduce((a,v)=>a+v,0)/defRates.length).toFixed(1):'-';
   const url=localStorage.getItem(UKEY);
   const datePickHtml=filtDate==='pick'?`<div style="display:flex;gap:8px;margin-bottom:8px;align-items:center">
     <input type="date" id="filt-from" value="${filtFrom}" onchange="filtFrom=this.value;renderDash()" style="flex:1;font-size:15px;padding:8px 10px;border-radius:9px;border:1.5px solid #ccc;background:#fff;font-family:inherit">
@@ -611,12 +611,12 @@ function renderDash(){
   document.getElementById('dash-content').innerHTML=
     `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
        ${url?`<span class="conn-ok"><span class="dot"></span>서버 연결됨</span>`:'<span style="font-size:13px;color:#888">로컬 데이터</span>'}
-       <button class="refresh-btn" onclick="loadDash()">🔄 새로고침</button>
+       <button class="refresh-btn" onclick="localStorage.removeItem('${CKEY}');loadDash()">🔄 새로고침</button>
      </div>
      <div class="stats">
        <div class="stat"><div class="sl2">오늘 입력</div><div class="sv">${todayLogs.length}</div><div class="su">건</div></div>
        <div class="stat"><div class="sl2">오늘 생산</div><div class="sv">${totProd}</div><div class="su">EA</div></div>
-       <div class="stat"><div class="sl2">평균 불량률</div><div class="sv" style="font-size:18px">${avgDef}${avgDef!=='-'?'%':''}</div><div class="su">오늘</div></div>
+       <div class="stat"><div class="sl2">평균 불량률</div><div class="sv" style="font-size:${avgDef!=='-'?'18px':'22px'}">${avgDef}${avgDef!=='-'?'%':''}</div><div class="su">오늘</div></div>
      </div>
      <div class="frow">
        <button class="ftag ${filtDate==='today'?'on':''}" onclick="filtDate='today';renderDash()">오늘</button>
@@ -657,7 +657,11 @@ function renderDetail(){
       <tr style="background:#e8e5e0"><td style="padding:5px 8px;font-weight:700">No</td><td style="padding:5px 8px;font-weight:700">공구명</td><td style="padding:5px 8px;font-weight:700">T번호</td></tr>
       ${d.processTools.map(t=>`<tr style="border-top:1px solid #e0ddd8"><td style="padding:5px 8px;color:#888">${t.no}</td><td style="padding:5px 8px;font-weight:600">${t.name}</td><td style="padding:5px 8px">${t.tNum||'-'}</td></tr>`).join('')}
     </table></div>`:'';
-  const imgHtml=d.drawingImg?`<div style="margin-bottom:9px"><strong style="font-size:14px;display:block;margin-bottom:6px">도면 사진</strong><img src="${d.drawingImg}" style="width:100%;border-radius:10px;border:1.5px solid #e0ddd8;max-height:300px;object-fit:contain;background:#f5f2ed"></div>`:'';
+  const imgHtml=d.drawingImg?`<div style="margin-bottom:9px">
+    <strong style="font-size:14px;display:block;margin-bottom:6px">도면 사진</strong>
+    <img src="${d.drawingImg}" onclick="openLightbox('${d.drawingImg}')" style="width:100%;border-radius:10px;border:1.5px solid #e0ddd8;max-height:200px;object-fit:contain;background:#f5f2ed;cursor:zoom-in">
+    <p style="font-size:12px;color:#aaa;margin-top:4px;text-align:center">👆 사진을 누르면 확대됩니다</p>
+  </div>`:'';
   document.getElementById('dash-content').innerHTML=
     `<button class="bk" onclick="dashView='list';renderDash()">← 목록으로</button>
      <div style="background:#fff;border:1px solid #e0ddd8;border-radius:12px;padding:16px;margin-bottom:10px">
@@ -676,7 +680,6 @@ function renderDetail(){
      ${d.tools&&d.tools.length?`<div style="background:#f5f2ed;border-radius:9px;padding:13px;font-size:13px"><strong>공구 교체:</strong><br>${d.tools.map(t=>`T${t.tNum} ${t.name} — ${t.reason}`).join('<br>')}</div>`:''}`;
 }
 
-// ── edit ──────────────────────────────────────────
 function editLog(i){
   const d=allLogs[i]; if(!d)return;
   editingSavedAt=d.savedAt;
@@ -684,8 +687,7 @@ function editLog(i){
   document.getElementById('d-worker').value=d.worker||'';
   document.querySelectorAll('[data-g="machine"]').forEach(b=>b.classList.toggle('on',b.dataset.v===d.machine));
   document.getElementById('d-on').value=d.powerOn||''; document.getElementById('d-off').value=d.powerOff||''; cOp();
-  const sk=['t','a','s','m','md','d','o'];
-  sk.forEach((k,idx)=>{if(d.stop)document.getElementById('st'+idx).value=d.stop[k]||0;}); cStop();
+  ['t','a','s','m','md','d','o'].forEach((k,idx)=>{if(d.stop)document.getElementById('st'+idx).value=d.stop[k]||0;}); cStop();
   document.querySelectorAll('[data-g="cool"]').forEach(b=>b.classList.toggle('on',b.dataset.v===d.coolant));
   document.getElementById('cd-row').style.display=d.coolant==='교체'?'':'none';
   document.getElementById('d-cooldt').value=d.coolantDate||'';
@@ -703,7 +705,7 @@ function editLog(i){
   document.getElementById('d-sus').value=d.suStart||''; document.getElementById('d-sue').value=d.suEnd||'';
   document.getElementById('d-mcs').value=d.mcStart||''; document.getElementById('d-mce').value=d.mcEnd||'';
   document.getElementById('d-cym').value=d.cycM||0; document.getElementById('d-cys').value=d.cycS||0; cTimes();
-  if(d.processTools) d.processTools.forEach(t=>{const ni=document.getElementById(`pt-n${t.no}`);const ti=document.getElementById(`pt-t${t.no}`);if(ni){ni.value=t.name||'';ti.value=t.tNum||'';}});
+  if(d.processTools) d.processTools.forEach(t=>{const ni=document.getElementById(`pt-n${t.no}`);if(ni){ni.value=t.name||'';document.getElementById(`pt-t${t.no}`).value=t.tNum||'';}});
   if(d.tools) d.tools.forEach(t=>{
     const ni=document.getElementById(`tc-n${t.no}`); if(!ni)return;
     ni.value=t.name||''; document.getElementById(`tc-t${t.no}`).value=t.tNum||'';
@@ -719,24 +721,25 @@ function editLog(i){
   toast('✏️ 수정 모드 — 내용 수정 후 저장하세요');
 }
 
-// ── delete ────────────────────────────────────────
 async function delLog(savedAt){
   if(!confirm('이 작업일지를 삭제하시겠습니까?'))return;
+  addDeleted(savedAt);
   try{const logs=JSON.parse(localStorage.getItem(LKEY)||'[]');localStorage.setItem(LKEY,JSON.stringify(logs.filter(d=>d.savedAt!==savedAt)));}catch(e){}
+  localStorage.removeItem(CKEY);
   const url=localStorage.getItem(UKEY);
   if(url){try{await fetch(url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'delete',savedAt})});}catch(e){}}
   allLogs=allLogs.filter(d=>d.savedAt!==savedAt);
   toast('🗑️ 삭제되었습니다'); renderDash();
 }
 
-// ── settings ──────────────────────────────────────
 function openSettings(){document.getElementById('overlay').classList.add('show');document.getElementById('url-inp').value=localStorage.getItem(UKEY)||'';}
 function closeSettings(e){if(!e||e.target===document.getElementById('overlay'))document.getElementById('overlay').classList.remove('show');}
 function saveUrl(){
   const v=document.getElementById('url-inp').value.trim();
   if(!v){toast('URL을 입력해주세요',1);return;}
   if(!v.includes('script.google.com')){toast('올바른 Apps Script URL이 아닙니다',1);return;}
-  localStorage.setItem(UKEY,v); document.getElementById('overlay').classList.remove('show');
+  localStorage.setItem(UKEY,v); localStorage.removeItem(CKEY);
+  document.getElementById('overlay').classList.remove('show');
   toast('✅ 서버 연결 설정 완료!');
 }
 function copyCode(){
