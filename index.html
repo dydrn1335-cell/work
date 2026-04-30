@@ -595,6 +595,13 @@ function showTab(t){
 
 // ── dashboard ─────────────────────────────────────
 let allLogs=[], filtDate='all', filtMachine='전체', dashView='list', detailLog=null;
+let filtFrom='', filtTo='';
+
+function setFiltDate(){
+  filtFrom=document.getElementById('filt-from')?.value||'';
+  filtTo=document.getElementById('filt-to')?.value||'';
+  renderDash();
+}
 
 async function loadDash(){
   const c=document.getElementById('dash-content');
@@ -625,6 +632,10 @@ function renderDash(){
   let logs=allLogs.filter(d=>{
     if(filtDate==='today'&&d.date!==today) return false;
     if(filtDate==='week'&&d.date<weekAgo) return false;
+    if(filtDate==='pick'){
+      if(filtFrom&&d.date<filtFrom) return false;
+      if(filtTo&&d.date>filtTo) return false;
+    }
     if(filtMachine!=='전체'&&d.machine!==filtMachine) return false;
     return true;
   });
@@ -646,8 +657,16 @@ function renderDash(){
        <button class="ftag ${filtDate==='today'?'on':''}" onclick="setFilt('date','today')">오늘</button>
        <button class="ftag ${filtDate==='week'?'on':''}" onclick="setFilt('date','week')">이번주</button>
        <button class="ftag ${filtDate==='all'?'on':''}" onclick="setFilt('date','all')">전체</button>
+       <button class="ftag ${filtDate==='pick'?'on':''}" onclick="setFilt('date','pick')">날짜선택</button>
+     </div>
+     ${filtDate==='pick'?`<div style="display:flex;gap:8px;margin-bottom:12px;align-items:center">
+       <input type="date" id="filt-from" value="${filtFrom}" onchange="setFiltDate()" style="flex:1;font-size:15px;padding:8px 10px;border-radius:9px;border:1.5px solid #ccc;background:#fff;font-family:inherit">
+       <span style="font-size:14px;color:#888">~</span>
+       <input type="date" id="filt-to" value="${filtTo}" onchange="setFiltDate()" style="flex:1;font-size:15px;padding:8px 10px;border-radius:9px;border:1.5px solid #ccc;background:#fff;font-family:inherit">
+     </div>`:''}
+     <div class="frow">
        <select class="fsel" onchange="setFilt('machine',this.value)">
-         ${['전체','CNC선반1','CNC선반2','CNC선반3','범용선반','범용밀링'].map(m=>`<option ${filtMachine===m?'selected':''}>${m}</option>`).join('')}
+         ${['전체','CNC선반1','CNC선반2','CNC선반3','범용선반','범용밀링','MCT5호기','MCT6호기'].map(m=>`<option ${filtMachine===m?'selected':''}>${m}</option>`).join('')}
        </select>
      </div>
      <div style="font-size:13px;color:#888;margin-bottom:10px">${logs.length}건 조회됨</div>`+
