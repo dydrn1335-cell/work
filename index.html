@@ -383,7 +383,6 @@ const GAS=`function doPost(e) {
   var d = JSON.parse(e.postData.contents);
 
   if (d.action === 'delete') {
-    // 삭제 대상 행 + 흔적(action:delete 행) 모두 완전히 제거
     var rows = sheet.getDataRange().getValues();
     for (var i = rows.length - 1; i >= 1; i--) {
       try {
@@ -397,26 +396,31 @@ const GAS=`function doPost(e) {
       .setMimeType(ContentService.MimeType.JSON);
   }
 
-  // 헤더 없으면 생성
   if (sheet.getLastRow() === 0) {
-    sheet.appendRow(['저장일시','날짜','요일','작업자','장비','금일생산','불량률','전체데이터']);
-    sheet.getRange(1,1,1,8).setFontWeight('bold');
+    sheet.appendRow(['저장일시','날짜','요일','작업자','장비','금일생산','불량률','전체데이터(사진제외)','사진1','사진2','사진3','사진4','사진5']);
+    sheet.getRange(1,1,1,13).setFontWeight('bold');
     sheet.setFrozenRows(1);
   }
 
-  // 같은 savedAt 기존 행이 있으면 덮어쓰기 (중복 방지)
+  // 중복 제거
   var existing = sheet.getDataRange().getValues();
   for (var j = existing.length - 1; j >= 1; j--) {
     try {
       var ex = JSON.parse(existing[j][7]);
-      if (ex.savedAt === d.savedAt) {
-        sheet.deleteRow(j + 1);
-        break;
-      }
+      if (ex.savedAt === d.savedAt) { sheet.deleteRow(j + 1); break; }
     } catch(err) {}
   }
 
-  sheet.appendRow([d.savedAt,d.date,d.dow,d.worker,d.machine,d.prod,d.defRate,JSON.stringify(d)]);
+  // 사진 분리 저장 (각 셀에 하나씩)
+  var imgs = d.drawingImgs || [];
+  var mainData = JSON.parse(JSON.stringify(d));
+  delete mainData.drawingImgs;
+  delete mainData.drawingImg;
+
+  var row = [d.savedAt, d.date, d.dow, d.worker, d.machine, d.prod, d.defRate, JSON.stringify(mainData)];
+  for (var k = 0; k < 5; k++) { row.push(imgs[k] || ''); }
+  sheet.appendRow(row);
+
   return ContentService.createTextOutput('{"status":"ok"}')
     .setMimeType(ContentService.MimeType.JSON);
 }
@@ -430,7 +434,14 @@ function doGet(e) {
   for (var i = rows.length - 1; i >= 1; i--) {
     try {
       var d = JSON.parse(rows[i][7]);
-      if (!d.action && !seen[d.savedAt]) { seen[d.savedAt] = true; data.push(d); }
+      if (!d.action && !seen[d.savedAt]) {
+        seen[d.savedAt] = true;
+        // 사진 재조합 (col 9~13)
+        var imgs = [];
+        for (var k = 8; k <= 12; k++) { if (rows[i][k]) imgs.push(rows[i][k]); }
+        d.drawingImgs = imgs;
+        data.push(d);
+      }
     } catch(err) {}
   }
   return ContentService.createTextOutput(JSON.stringify(data))
@@ -493,7 +504,7 @@ function buildTcards(){
 }
 
 // ── 이미지 압축 (서버 전송용) ─────────────────────
-function compressImage(src, maxW=800, quality=0.55){
+function compressImage(src, maxW=400, quality=0.35){
   return new Promise(resolve=>{
     const img=new Image();
     img.onload=()=>{
