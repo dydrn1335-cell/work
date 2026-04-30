@@ -492,6 +492,22 @@ function buildTcards(){
   }).join('');
 }
 
+// ── 이미지 압축 (서버 전송용) ─────────────────────
+function compressImage(src, maxW=800, quality=0.55){
+  return new Promise(resolve=>{
+    const img=new Image();
+    img.onload=()=>{
+      let w=img.width, h=img.height;
+      if(w>maxW){h=Math.round(h*maxW/w);w=maxW;}
+      const c=document.createElement('canvas');
+      c.width=w; c.height=h;
+      c.getContext('2d').drawImage(img,0,0,w,h);
+      resolve(c.toDataURL('image/jpeg',quality));
+    };
+    img.src=src;
+  });
+}
+
 // ── images ────────────────────────────────────────
 function renderImgGrid(){
   const g=document.getElementById('img-grid');
@@ -506,7 +522,11 @@ function addImg(input){
   const files=Array.from(input.files);
   files.forEach(file=>{
     const r=new FileReader();
-    r.onload=e=>{imgList.push(e.target.result);renderImgGrid();};
+    r.onload=async e=>{
+      const compressed=await compressImage(e.target.result);
+      imgList.push(compressed);
+      renderImgGrid();
+    };
     r.readAsDataURL(file);
   });
   input.value='';
@@ -604,9 +624,8 @@ async function save(){
   localStorage.removeItem(CKEY);
   justSaved=true;
   if(url){
-    // 서버엔 사진 제외하고 전송 (용량 절감)
-    const serverData={...d, drawingImgs:[], drawingImg:''};
-    try{await fetch(url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(serverData)});toast('✅ 저장 완료! 서버로 전송됐습니다.');}
+    // 압축된 사진 포함해서 서버 전송
+    try{await fetch(url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(d)});toast('✅ 저장 완료! 서버로 전송됐습니다.');}
     catch(e){toast('💾 로컬 저장됨 (서버 전송 실패)',1);}
   }else{toast('💾 로컬에 저장됐습니다');}
 }
