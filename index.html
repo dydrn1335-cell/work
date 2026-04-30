@@ -413,7 +413,8 @@ document.getElementById('gas-code').textContent = GAS;
 // ── init ──────────────────────────────────────────
 (function(){
   const t=new Date();
-  document.getElementById('d-date').value=t.toISOString().split('T')[0];
+  const kst=new Date(t.getTime()+9*60*60*1000);
+  document.getElementById('d-date').value=kst.toISOString().split('T')[0];
   setDow();
   document.getElementById('d-date').addEventListener('change',setDow);
   buildSbar(); buildPtbl(); buildTcards();
